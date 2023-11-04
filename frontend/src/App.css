@@ -45,3 +45,26 @@
   fill:#61dafb;stroke:#FFFFFF;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 }
 
+.fact-box{
+  z-index:999999;
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+  width: fit-content;
+  border: black;
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  background-color: #61dafb;
+}
+
+.dialog{
+  z-index: 999999999;
+  position: absolute;
+  background-color: grey;
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
