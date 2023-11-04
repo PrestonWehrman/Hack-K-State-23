@@ -77,7 +77,7 @@ function SVGMap({usableNodes, countryFacts, correct}){
     </g>
   </svg>
     <ShowFacts facts={countryFacts} currentIndex={factIndex} onClick={(index)=>setFactIndex(index)} visitedSets={visitedSets}/>
-      {end && <div className={"dialog"}>{`Current Answer was ${correct}`}</div>}
+      {end && <div className={"dialog-window"}><div className={"dialog-box"}> {`Current Answer was ${correct}`}</div></div>}
   </div>;
 }
 
