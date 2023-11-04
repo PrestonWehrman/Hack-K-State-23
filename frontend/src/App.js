@@ -26,7 +26,7 @@ function parseXML(xmlString){
   const allUsableNodes = Array.from(doc.getElementsByTagName('g')).flatMap((gNode)=>Array.from(gNode.children));
   allUsableNodes.forEach((node, index)=>{
     if (node.tagName === 'polygon')
-      node.setAttribute('id', 'russia');
+      node.setAttribute('id', 'Russia');
   });
   const actualNodes = allUsableNodes.map((node)=>({
     type: node.tagName,
