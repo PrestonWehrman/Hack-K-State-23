@@ -85,7 +85,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-const fetchCountry = (countryName)=>Promise.resolve(['Facts1', 'Facts2', 'Facts3']);
+const fetchCountry = (countryName)=>Promise.resolve(['Facts1', 'Facts2', 'Facts3', 'Facts4', 'Facts5']);
 
 function App() {
 
