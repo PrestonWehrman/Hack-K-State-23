@@ -85,7 +85,13 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-const fetchCountry = (countryName)=>Promise.resolve(['Facts1', 'Facts2', 'Facts3']);
+const fetchCountry = async (countryName)=>{
+  const response = await fetch(`http://localhost:8000/namePull/${countryName}`, {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+  return response.json();}
 
 function App() {
 
@@ -99,7 +105,7 @@ function App() {
     setCorrectCountry(usableNodes[getRandomInt(usableNodes.length)]);
   }, [usableNodes]);
 
-  const [countryFacts] = useAsyncState(React.useCallback(()=>correctCountry === undefined ? Promise.resolve(undefined): fetchCountry(correctCountry), [correctCountry]));
+  const [countryFacts] = useAsyncState(React.useCallback(()=>correctCountry === undefined ? Promise.resolve(undefined): fetchCountry(correctCountry.attributes.id), [correctCountry]));
   console.log(countryFacts)
   return (
     <div>
