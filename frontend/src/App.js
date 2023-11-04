@@ -42,7 +42,7 @@ window.addEventListener("scroll", ()=>console.log('scroll'));
 
 function ShowFacts({facts, currentIndex, visitedSets, onClick: handleClick}){
     return <div className={"fact-box"}>
-        <div className>{facts.map((fact, index)=><button disabled={!visitedSets.current.has(index)} key={index} onClick={()=>handleClick(index)} style={{height: "30px", width: "30px", backgroundColor: "darkgreen",}}/>)}</div>
+        <div className>{facts.map((fact, index)=><button disabled={!visitedSets.current.has(index)} key={index} onClick={()=>handleClick(index)} className={"fact-button"}/>)}</div>
         {facts[currentIndex]}
     </div>
 
@@ -91,7 +91,7 @@ function App() {
 
   const [staticXML] = useAsyncState(fetchXML);
   const _usableNodes = React.useMemo(()=>staticXML === undefined ? undefined : parseXML(staticXML), [staticXML]);
- const usableNodes = React.useMemo(()=>_usableNodes?.map((node)=>({...node, attributes: {...node.attributes, id: node.attributes.id === undefined ? 'russia' : node.attributes.id}})), [_usableNodes])
+ const usableNodes = React.useMemo(()=>_usableNodes?.map((node)=>({...node, attributes: {...node.attributes, id: node.attributes.id === undefined ? 'Russia' : node.attributes.id}})), [_usableNodes])
   const [correctCountry, setCorrectCountry] = React.useState(undefined);
  console.log(usableNodes?.map((node)=>node.attributes.id));
  React.useLayoutEffect(()=>{
