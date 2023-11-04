@@ -65,9 +65,18 @@
 }
 
 .fact-button {
+
   height: 30px; 
   width: 30px;
-  background-color: aqua;
+  background-color: rgb(200, 200, 200);
+}
+
+.fact-button:hover{
+  /*
+    help vinny I want it to switch to this when clicked as well
+    also I don't like the borders
+  */
+  filter: brightness(80%)
 }
 
 .dialog{
