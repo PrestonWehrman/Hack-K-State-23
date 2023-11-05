@@ -38,28 +38,28 @@
 }
 
 .sto-5{
-  fill:#ffd6d6; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
+  fill:#f3ebff; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 }
 
 .sto-0{
-    fill:#d6f1ff; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
+    fill:#ebf8ff; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 
 }
 
 .sto-1{
-    fill:#d6ffd7; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
+    fill:#fffcec; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 }
 
 .sto-2{
-      fill:#e5d6ff; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
+      fill:#ffeded; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 }
 
 .sto-3{
-    fill:#fff7c3; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
+    fill:#fff4ec; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 }
 
 .sto-4{
-     fill:#ffd6b6; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
+     fill:#ecffec; stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 
 }
 
@@ -101,6 +101,7 @@
   font-family: "Nunito", sans-serif;
   z-index:999999;
   padding-left: 0.5%;
+  padding-top: 0.5%;
   position: absolute;
   bottom: 10%;
   left: 5%;
@@ -113,6 +114,26 @@
   border-radius: 10px;
   background-image: url(https://media.discordapp.net/attachments/750482796262457408/1170462274822090762/New_Project_1.jpg?ex=655920f0&is=6546abf0&hm=d21702a0fc99d1f1dbd799c83442103b38adae88d9218b72207c0b3937371e81&=&width=882&height=588);
   background-size: cover;
+}
+
+.loss {
+  text-align: center;
+  margin-top: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top-right-radius:  5px;
+  border-top-left-radius:  5px;
+  background-color: #feae6f;
+}
+
+.win {
+  text-align: center;
+  margin-top: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top-right-radius:  5px;
+  border-top-left-radius:  5px;
+  background-color: #a6e366;
 }
 
 .fact-button {
@@ -164,9 +185,11 @@
   margin: 8% auto; /* 10% from the top and centered */
   overflow: hidden;
   height: 40%;
+  padding-top: 0px;
   border-radius: 5px;
   width: 30%; /* Could be more or less, depending on screen size */
   background-color: white;
+  text-align: center;
 }
 
 .europe{

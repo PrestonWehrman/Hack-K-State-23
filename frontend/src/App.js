@@ -119,11 +119,16 @@ function SVGMap({usableNodes, countryFacts, correct}){
   </div>
     <ShowFacts facts={countryFacts} visitedSets={visitedIndexes}/>
               {end && <div className={"dialog-window"} onClick={()=>window.location.reload()}>
-          <div className={"dialog-box"} onClick={(event)=>event.stopPropagation()} > {
-                Object.values(visitedIndexes).some((idx)=>idx==='country') ? 'You guessed correctly!' :
-              `Correct Answer was ${correct.country}`
-
-          }</div>
+          <div className={"dialog-box"} onClick={(event)=>event.stopPropagation()} >  <p className={
+            Object.values(visitedIndexes).some((idx)=>idx==='country') ? 'win' :
+            `loss`
+          }> {
+                Object.values(visitedIndexes).some((idx)=>idx==='country') ? 'Correct!' :
+              `Incorrect`
+              }</p>{
+              Object.values(visitedIndexes).some((idx)=>idx==='country') ? `${correct.country} was correct!` :
+              `Correct Answer was ${correct.country}`}
+            </div>
         {
           /**
         <svg version={"1.1"} xmlns={"http://www.w3.org/2000/svg"} x={'0px'} y={'0px'} viewBox={"0 0 800 600"}>
