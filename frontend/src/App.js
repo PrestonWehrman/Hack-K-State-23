@@ -88,8 +88,9 @@ function SVGMap({usableNodes, countryFacts, correct}){
 
   const hasCorrectContinent = Object.values(visitedIndexes).some((idx)=>idx === 'continent');
     const end = getNumbers(visitedIndexes) >= countryFacts.length || Object.values(visitedIndexes).some((idx)=>idx === 'country') ;
-  console.log('correct continent', hasCorrectContinent)
-  const correctCountryPaths = React.useMemo(()=>usableNodes.filter((node)=>node.attributes.id === correct.country), [correct, usableNodes]);
+  console.log('correct continent', hasCorrectContinent);
+
+  const correctCountryPaths = React.useMemo(()=>usableNodes.filter((node)=>node.attributes.id === correct.country || node.attributes.id === 'United Kingdom'), [correct, usableNodes]);
     return <>
     <div className={hasCorrectContinent ? mapTransform[correct.continent] : ''}  >
     <svg version={"1.1"} xmlns={"http://www.w3.org/2000/svg"} x={'0px'} y={'0px'} viewBox={"0 0 800 600"}>
@@ -112,14 +113,15 @@ function SVGMap({usableNodes, countryFacts, correct}){
         });
       },
         className: status === undefined ?  `sto-${Object.keys(mapTransform).findIndex((key)=>key===node.attributes.continent)}` : status === 'incorrect' ? 'st0-incorrect' : status === 'continent' ? 'st0-continent' : 'st0-correct',
-        disabled: getNumbers(visitedIndexes) === countryFacts.length
+        disabled: getNumbers(visitedIndexes) === countryFacts.length,
       })})}
     </g>
   </svg>
   </div>
     <ShowFacts facts={countryFacts} visitedSets={visitedIndexes}/>
               {end && <div className={"dialog-window"} onClick={()=>window.location.reload()}>
-          <div className={"dialog-box"} onClick={(event)=>event.stopPropagation()} >  <p className={
+          <div className={"dialog-box"} onClick={(event)=>event.stopPropagation()} >
+              <p className={
             Object.values(visitedIndexes).some((idx)=>idx==='country') ? 'win' :
             `loss`
           }> {
@@ -128,18 +130,17 @@ function SVGMap({usableNodes, countryFacts, correct}){
               }</p>{
               Object.values(visitedIndexes).some((idx)=>idx==='country') ? `${correct.country} was correct!` :
               `Correct Answer was ${correct.country}`}
-            </div>
-        {
-          /**
-        <svg version={"1.1"} xmlns={"http://www.w3.org/2000/svg"} x={'0px'} y={'0px'} viewBox={"0 0 800 600"}>
+                      <svg version={"1.1"} xmlns={"http://www.w3.org/2000/svg"} x={'500px'} y={'25px'} viewBox={"0 0 800 600"}>
             <g id="just_some_part">
-                {correctCountryPaths.map((node, index)=>React.createElement(node.type, {
+                {usableNodes.map((node, index)=>React.createElement(node.type, {
         ...node.attributes,
         key: index,
-                 className: 'in-dialog-path',
+                 className: node.attributes.id === correct.country ? 'in-dialog-path-high' : 'in-dialog-path',
         }))}
             </g>
-        </svg>**/}
+        </svg>
+            </div>
+
       </div>}
     </>;
 }

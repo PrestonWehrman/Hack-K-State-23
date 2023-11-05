@@ -84,6 +84,9 @@
   fill:rgb(0, 0, 0); stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 }
 
+.in-dialog-path-high{
+  fill: rgb(101, 231, 37); stroke:#b0b0b0;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
+}
 .st0-incorrect{
   fill:#feae6f;stroke:#FFFFFF;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;
 }
@@ -184,7 +187,7 @@
 .dialog-box{
   margin: 8% auto; /* 10% from the top and centered */
   overflow: hidden;
-  height: 40%;
+  height: min-content;
   padding-top: 0px;
   border-radius: 5px;
   width: 30%; /* Could be more or less, depending on screen size */
@@ -213,5 +216,5 @@
 }
 
 .oceania{
-  transform: scale(3) translateX(-33%) translateY(-22%)
+  transform: scale(3) translateX(-33%) translateY(-22%);
 }

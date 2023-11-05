@@ -12,7 +12,7 @@ def index(request):
 def phraseCreator(request, country):
   phrase = 'Give me 5 fun facts for ' + country + ' for a guess the country game without mentioning ' + country + ' in the facts'
   messages = [ {"role": "system", "content": "You are a intelligent assistant."} ]
-  """
+
   
   messages.append( 
         {"role": "user", "content": phrase}, 
@@ -27,9 +27,8 @@ def phraseCreator(request, country):
        string = _line.strip()[2:].strip()
        if string != '':
            line.append(string)
- """
-  line = ["sdghvdhgddhcf", "siauhdfuydgtf", "ssdsd", "suhduydf"]
-  response = JsonResponse(line, safe=False) 
+
+  response = JsonResponse(line, safe=False)
   return response
   
 
