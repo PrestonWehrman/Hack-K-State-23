@@ -24,8 +24,12 @@ function parseXML(xmlString){
   const doc = parser.parseFromString(xmlString, "application/xml");
   const allUsableNodes = Array.from(doc.getElementsByTagName('g')).flatMap((gNode)=>Array.from(gNode.children));
   allUsableNodes.forEach((node, index)=>{
-    if (node.tagName === 'polygon')
-      node.setAttribute('id', 'Russia');
+    if (node.tagName === 'polygon'){
+        node.setAttribute('id', 'Russia');
+        node.setAttribute('continent', 'Europe');
+    }
+    if (node.getAttribute('continent') === undefined || node.getAttribute('continent') === null)
+        node.setAttribute('continent', 'Europe');
   });
   return allUsableNodes.map((node) => ({
     type: node.tagName,
@@ -70,7 +74,8 @@ const mapTransform = {
     'South America': 'south-america',
     'Africa': 'africa',
     'Asia': 'asia',
-    'Oceania': 'oceania'
+    'Oceania': 'oceania',
+    'Unknown': ''
 }
 
 function SVGMap({usableNodes, countryFacts, correct}){
@@ -106,7 +111,7 @@ function SVGMap({usableNodes, countryFacts, correct}){
             return {...prevState, [currentMax]: newStatus, [currentMax+1]: undefined};
         });
       },
-        className: status === undefined ?  'st0' : status === 'incorrect' ? 'st0-incorrect' : status === 'continent' ? 'st0-continent' : 'st0-correct',
+        className: status === undefined ?  `sto-${Object.keys(mapTransform).findIndex((key)=>key===node.attributes.continent)}` : status === 'incorrect' ? 'st0-incorrect' : status === 'continent' ? 'st0-continent' : 'st0-correct',
         disabled: getNumbers(visitedIndexes) === countryFacts.length
       })})}
     </g>
