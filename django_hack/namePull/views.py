@@ -28,7 +28,7 @@ def phraseCreator(request, country):
        if string != '':
            line.append(string)
  """
-  line = ["sdghvdhgddhcf", "siauhdfuydgtf"]
+  line = ["sdghvdhgddhcf", "siauhdfuydgtf", "ssdsd", "suhduydf"]
   response = JsonResponse(line, safe=False) 
   return response
   

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 
@@ -28,57 +27,111 @@ function parseXML(xmlString){
     if (node.tagName === 'polygon')
       node.setAttribute('id', 'Russia');
   });
-  const actualNodes = allUsableNodes.map((node)=>({
+  return allUsableNodes.map((node) => ({
     type: node.tagName,
-    attributes: Object.fromEntries(Array.from(node.attributes).map((attr)=>[attr.name, attr.value]))
+    attributes: Object.fromEntries(Array.from(node.attributes).map((attr) => [attr.name, attr.value]))
   }));
-
-  console.log(actualNodes[5]);
-  console.log(new Set(allUsableNodes.map((node)=>node.getAttribute('id'))).size);
-  return actualNodes;
 }
 
-window.addEventListener("scroll", ()=>console.log('scroll'));
+const getNumbers = (obj)=>Math.max(...(Object.keys(obj).map((num)=>Number.parseInt(num))));
 
-function ShowFacts({facts, currentIndex, visitedSets, onClick: handleClick}){
+function ShowFacts({facts, visitedSets}){
+    const [currentIdx, setCurrentIdx] = React.useState(getNumbers(visitedSets));
+    React.useLayoutEffect(()=>{
+        const newIndex = getNumbers(visitedSets);
+        if (newIndex >= facts.length) return;
+        setCurrentIdx(newIndex);
+    }, [visitedSets]);
     return <div className={"fact-box"}>
-        <div className>{facts.map((fact, index)=><button disabled={!visitedSets.current.has(index)} key={index} onClick={()=>handleClick(index)} className={"fact-button"}/>)}</div>
-        {facts[currentIndex]}
+        <div className>{facts.map((fact, index)=>{
+            const status = visitedSets[index];
+            const className = status === undefined ?  '' :
+                status === 'incorrect' ?
+                    '-bg-incorrect' : status === 'continent'
+                        ? '-bg-continent' : '-bg-correct';
+            return <button disabled={!Object.keys(visitedSets).includes(index.toString())} key={index} onClick={()=>setCurrentIdx(index)} className={`fact-button${className}`}/>
+
+        })}</div>
+        {facts[currentIdx]}
     </div>
 
 }
 
+/* Europe -- transform: scale(3) translateX(-1%) translateY(8%); /
+  / North America -- transform: scale(2) translateX(25%) translateY(3%); /
+  / South America -- transform: scale(2) translateX(18%) translateY(-20%); /
+  / Africa -- transform: scale(2) translateX(-2%) translateY(-11%); /
+  / Asia -- transform: scale(2.1) translateX(-19%) translateY(-3%); /
+  / Oceania -- transform: scale(3) translateX(-33%) translateY(-22%); */
+
+const mapTransform = {
+    'Europe': 'europe',
+    'North America': 'north-america',
+    'South America': 'south-america',
+    'Africa': 'africa',
+    'Asia': 'asia',
+    'Oceania': 'oceania'
+}
+
 function SVGMap({usableNodes, countryFacts, correct}){
-  const [selectedCountry, setSelectedCountry] = React.useState(undefined);
-  const [factIndex, _setFactIndex] = React.useState(0);
-  const [end, setEnd] = React.useState(false);
-  const visitedSets = React.useRef(new Set([0]));
-    const setFactIndex = (factIdx)=>{
-      visitedSets.current.add(factIdx);
-      _setFactIndex(factIdx)
-  }
-  return <div>
+  const [selectedCountry, setSelectedCountry] = React.useState({});
+  const [visitedIndexes, setVisitedIndexes] = React.useState({0: undefined});
+
+
+  const [position, setPosition] = React.useState(undefined);
+    console.log(visitedIndexes)
+
+  const hasCorrectContinent = Object.values(visitedIndexes).some((idx)=>idx === 'continent');
+    const end = getNumbers(visitedIndexes) >= countryFacts.length || Object.values(visitedIndexes).some((idx)=>idx === 'country') ;
+  console.log('correct continent', hasCorrectContinent)
+  const correctCountryPaths = React.useMemo(()=>usableNodes.filter((node)=>node.attributes.id === correct.country), [correct, usableNodes]);
+    return <>
+    <div className={hasCorrectContinent ? mapTransform[correct.continent] : ''}  >
     <svg version={"1.1"} xmlns={"http://www.w3.org/2000/svg"} x={'0px'} y={'0px'} viewBox={"0 0 800 600"}>
     <g id={"World"}>
-      {usableNodes.map((node, index)=>React.createElement(node.type, {
+      {usableNodes.map((node, index)=>{
+          const status = selectedCountry[node.attributes.id];
+          return React.createElement(node.type, {
         ...node.attributes,
         key: index,
         onClick: ()=>{
-        setSelectedCountry(node.attributes.id);
-        if (factIndex === countryFacts.length -1){
-            setEnd(true);
-            return
-        }
-        setFactIndex(factIndex+1);
+            const newStatus = node.attributes.id === correct.country ? 'country' : node.attributes.continent === correct.continent ? 'continent' : 'incorrect';
+        setSelectedCountry((prev)=>{
+            if (node.id in prev) return prev;
+            const nodeId = node.attributes.id;
+            return {...prev, [nodeId]: newStatus}
+        });
+        setVisitedIndexes((prevState)=>{
+            const currentMax = getNumbers(prevState);
+            return {...prevState, [currentMax]: newStatus, [currentMax+1]: undefined};
+        });
       },
-        className: selectedCountry === node.attributes.id ? "st0-clicked" : "st0",
-        disabled: factIndex === countryFacts.length
-      }))}
+        className: status === undefined ?  'st0' : status === 'incorrect' ? 'st0-incorrect' : status === 'continent' ? 'st0-continent' : 'st0-correct',
+        disabled: getNumbers(visitedIndexes) === countryFacts.length
+      })})}
     </g>
   </svg>
-    <ShowFacts facts={countryFacts} currentIndex={factIndex} onClick={(index)=>setFactIndex(index)} visitedSets={visitedSets}/>
-      {end && <div className={"dialog-window"}><div className={"dialog-box"}> {`Current Answer was ${correct}`}</div></div>}
-  </div>;
+  </div>
+    <ShowFacts facts={countryFacts} visitedSets={visitedIndexes}/>
+              {end && <div className={"dialog-window"} onClick={()=>window.location.reload()}>
+          <div className={"dialog-box"} onClick={(event)=>event.stopPropagation()} > {
+                Object.values(visitedIndexes).some((idx)=>idx==='country') ? 'You guessed correctly!' :
+              `Correct Answer was ${correct.country}`
+
+          }</div>
+        {
+          /**
+        <svg version={"1.1"} xmlns={"http://www.w3.org/2000/svg"} x={'0px'} y={'0px'} viewBox={"0 0 800 600"}>
+            <g id="just_some_part">
+                {correctCountryPaths.map((node, index)=>React.createElement(node.type, {
+        ...node.attributes,
+        key: index,
+                 className: 'in-dialog-path',
+        }))}
+            </g>
+        </svg>**/}
+      </div>}
+    </>;
 }
 
 function getRandomInt(max) {
@@ -99,19 +152,24 @@ function App() {
   const _usableNodes = React.useMemo(()=>staticXML === undefined ? undefined : parseXML(staticXML), [staticXML]);
  const usableNodes = React.useMemo(()=>_usableNodes?.map((node)=>({...node, attributes: {...node.attributes, id: node.attributes.id === undefined ? 'Russia' : node.attributes.id}})), [_usableNodes])
   const [correctCountry, setCorrectCountry] = React.useState(undefined);
- console.log(usableNodes?.map((node)=>node.attributes.id));
  React.useLayoutEffect(()=>{
     if (usableNodes === undefined) return;
-    setCorrectCountry(usableNodes[getRandomInt(usableNodes.length)]);
-  }, [usableNodes]);
+    const distinct = Array.from(new Set(usableNodes.map((usableNode)=>usableNode.attributes.id).filter((id)=>id !== 'Unknown')).keys());
+    const _country = distinct[getRandomInt(distinct.length)];
+    const continent = usableNodes.find((node)=>node.attributes.id === _country).attributes.continent;
 
-  const [countryFacts] = useAsyncState(React.useCallback(()=>correctCountry === undefined ? Promise.resolve(undefined): fetchCountry(correctCountry.attributes.id), [correctCountry]));
-  console.log(countryFacts)
+    setCorrectCountry({
+        country: _country,
+        continent
+    });
+  }, [usableNodes]);
+ console.log(correctCountry)
+  const [countryFacts] = useAsyncState(React.useCallback(()=>correctCountry === undefined ? Promise.resolve(undefined): fetchCountry(correctCountry.country), [correctCountry]));
   return (
     <div>
       {countryFacts === undefined ?
           null :
-          usableNodes && <SVGMap usableNodes={usableNodes} countryFacts={countryFacts} correct={correctCountry.attributes.id}/>}
+          usableNodes && <SVGMap usableNodes={usableNodes} countryFacts={countryFacts} correct={correctCountry}/>}
     </div>
   );
 }
